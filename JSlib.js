@@ -122,5 +122,20 @@ var hexadecimal = "16";
  * Returns the number in base 'base'
  **/
 String.prototype.toBase = function (base) {
-    return parseInt(this.toString()).toSting(base);
+    return parseInt(this.toString()).toString(base);
+}
+
+/**
+ * Returns the number in base 'base'
+**/
+String.prototype.toBaseWip = function (base) {
+    var symbols = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    var decimal = parseFloat(this.toString());
+    var conversion = "";
+    if (base > symbols.length || base <= 1) { return false; }
+    while (decimal >= 1) {
+        conversion = symbols[(decimal - (base * Math.floor(decimal / base)))] + conversion;
+        decimal = Math.floor(decimal / base);
+    }
+    return (base < 11) ? parseInt(conversion) : conversion;
 }
