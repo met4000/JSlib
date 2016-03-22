@@ -109,3 +109,18 @@ function includeJs (jsFilePath) {
     js.src = jsFilePath;
     document.body.appendChild(js);
 }
+
+var binary = "2";
+var trinary = "3";
+var quadnary = "4";
+var pentanary = "5";
+var hexanary = "6";
+var decimal = "10";
+var hexadecimal = "16";
+
+/**
+ * Returns the number in base 'base'
+ **/
+String.prototype.toBase = function (base) {
+    return parseInt(this.toString()).toSting(base);
+}
