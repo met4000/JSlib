@@ -7,7 +7,7 @@ function Article() {
 */
 
 /**
-* Refreshes the page
+ * Refreshes the page
 **/
 function refreshPage() {
     "use strict";
@@ -15,7 +15,7 @@ function refreshPage() {
 };
 
 /**
-* Returns a string with the char located at 'position' replaced with 'char'
+ * Returns a string with the char located at 'position' replaced with 'char'
 **/
 String.prototype.setCharAt = function (position, char) {
     "use strict";
@@ -26,7 +26,7 @@ String.prototype.setCharAt = function (position, char) {
 };
 
 /**
-* Returns the index of the 'n'th 'char'
+ * Returns the index of the 'n'th 'char'
 **/
 String.prototype.nIndexOf = function (char, n) {
     "use strict";
@@ -44,9 +44,9 @@ String.prototype.nIndexOf = function (char, n) {
 };
 
 /**
-* Returns the index of the 'n'th last 'char'
-*
-* BUG: SEEMS TO BE UNABLE TO DETECT LAST CHARACTER AS CHAR
+ * Returns the index of the 'n'th last 'char'
+ *
+ * BUG: SEEMS TO BE UNABLE TO DETECT LAST CHARACTER AS CHAR
 **/
 String.prototype.nLastIndexOf = function (char, n) {
     "use strict";
@@ -64,8 +64,8 @@ String.prototype.nLastIndexOf = function (char, n) {
 };
 
 /**
-* Returns the number of times 'char' is found in the string
-* If 'char' is *, then will return the number of non " " characters
+ * Returns the number of times 'char' is found in the string
+ * If 'char' is *, then will return the number of non " " characters
 **/
 String.prototype.amountOf = function (char) {
     var charAmount = 0;
@@ -82,7 +82,7 @@ String.prototype.amountOf = function (char) {
 }
 
 /**
-* Creates a linebreak 'amount' long (use with span/div and onload)
+ * Creates a linebreak 'amount' long (use with span/div and onload)
 **/
 HTMLObjectElement.prototype.br = function (amount) {
     var internalCalc = "";
@@ -93,9 +93,19 @@ HTMLObjectElement.prototype.br = function (amount) {
 };
 
 /**
-* Returns a random int between 'min' and 'max'
+ * Returns a random int between 'min' and 'max'
 **/
 function getRandomInt(min, max) {
     "use strict";
     return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/**
+ * Includes the JavaScript file located at 'jsFilePath'
+**/
+function includeJs (jsFilePath) {
+    var js = document.createElement("script");
+    js.type = "text/javascript";
+    js.src = jsFilePath;
+    document.body.appendChild(js);
 }
