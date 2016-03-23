@@ -12,7 +12,7 @@ function Article() {
 function refreshPage() {
     "use strict";
     window.location = window.location;
-};
+}
 
 /**
  * Returns a string with the char located at 'position' replaced with 'char'
@@ -110,6 +110,13 @@ function includeJs (jsFilePath) {
     document.body.appendChild(js);
 }
 
+/**
+ * Returns the slshified string
+ **/
+String.prototype.slashify = function () {
+    return this;
+}
+
 var binary = "2";
 var trinary = "3";
 var quadnary = "4";
@@ -119,17 +126,35 @@ var decimal = "10";
 var hexadecimal = "16";
 
 /**
- * Returns the number in base 'base'
+ * Returns the base 10 number in base 'base'
  **/
-String.prototype.toBase = function (base) {
+String.prototype.toBaseDef = function (base) {
     return parseInt(this.toString()).toString(base);
 }
 
 /**
- * Returns the number in base 'base'
+ * Returns the base 'base' number in base 10
+ **/
+String.prototype.toDec = function (base) {
+    "use strict";
+    var symbols = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\`\-\=\~\!\@\#\$\%\^\&\*\(\)\_\+\[\]\\\{\}\|\;\'\:\"\,\.\/\<\>\?".split("");
+    var decimal = 0;
+    var conversion = this.toString();
+    var hierarchy = 0;
+    if (base > symbols.length || base <= 1) { return false; }
+    for (var position = conversion.length - 1; position >= 0; position--) {
+        if (symbols.indexOf(conversion.charAt(position)) >= base) { return false; }
+        decimal = (symbols.indexOf(conversion.charAt(position)) * Math.pow(base, hierarchy)) + decimal;
+        hierarchy++;
+    }
+    return parseInt(decimal);
+}
+
+/**
+ * Returns the base 10 number in base 'base'
 **/
-String.prototype.toBaseWip = function (base) {
-    var symbols = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+String.prototype.toBase = function (base) {
+    var symbols = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\`\-\=\~\!\@\#\$\%\^\&\*\(\)\_\+\[\]\\\{\}\|\;\'\:\"\,\.\/\<\>\?".split("");
     var decimal = parseFloat(this.toString());
     var conversion = "";
     if (base > symbols.length || base <= 1) { return false; }
