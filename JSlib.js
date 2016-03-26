@@ -111,11 +111,36 @@ function includeJs (jsFilePath) {
 }
 
 /**
- * Returns the slshified string
+ * Returns the slashified string
  **/
 String.prototype.slashify = function () {
-    return this;
+    var slashified = "\\" + this.toString();
+    for (var pos = 2; pos < slashified.length; pos = pos + 2) {
+        slashified = slashified.substring(0, pos) + "\\" + slashified.substring(pos);
+    }
+    return slashified;
 }
+
+function stringMath() {}
+
+/**
+ * Adds two strings together, as if they were integers
+ **/
+stringMath.prototype.add = function (string1, string2) {
+    "use strict";
+    var num = "", ipos = 0;
+    for (var pos = (string1.length > string2.length) ? string1.length - 1 : string2.length - 1; pos >= 0; pos--) {
+        if (string1.charAt(string1.length - 1 - ipos) === "") {
+            num = parseInt(string2.charAt(string2.length - 1 - ipos)) + num;
+        } else if (string2.charAt(string2.length - 1 - ipos) === "") {
+            num = parseInt(string1.charAt(string1.length - 1 - ipos)) + num;
+        } else {
+            num = parseInt(string1.charAt(string1.length - 1 - ipos)) + parseInt(string2.charAt(string2.length - 1 - ipos)) + num;
+        }
+        ipos++;
+    }
+    return num;
+};
 
 var binary = "2";
 var trinary = "3";
@@ -126,13 +151,6 @@ var decimal = "10";
 var hexadecimal = "16";
 
 /**
- * Returns the base 10 number in base 'base'
- **/
-String.prototype.toBaseDef = function (base) {
-    return parseInt(this.toString()).toString(base);
-}
-
-/**
  * Returns the base 'base' number in base 10
  **/
 String.prototype.toDec = function (base) {
@@ -141,13 +159,14 @@ String.prototype.toDec = function (base) {
     var decimal = 0;
     var conversion = this.toString();
     var hierarchy = 0;
+    if (base === undefined) { base = 94; }
     if (base > symbols.length || base <= 1) { return false; }
     for (var position = conversion.length - 1; position >= 0; position--) {
         if (symbols.indexOf(conversion.charAt(position)) >= base) { return false; }
         decimal = (symbols.indexOf(conversion.charAt(position)) * Math.pow(base, hierarchy)) + decimal;
         hierarchy++;
     }
-    return parseInt(decimal);
+    return decimal.toString();
 }
 
 /**
