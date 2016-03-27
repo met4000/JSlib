@@ -126,21 +126,68 @@ function stringMath() {}
 /**
  * Adds two strings together, as if they were integers
  **/
-stringMath.prototype.add = function (string1, string2) {
+stringMath.add = function (string1, string2) {
     "use strict";
-    var num = "", ipos = 0;
+    var num = "", temp_num = 0,ipos = 0;
     for (var pos = (string1.length > string2.length) ? string1.length - 1 : string2.length - 1; pos >= 0; pos--) {
         if (string1.charAt(string1.length - 1 - ipos) === "") {
-            num = parseInt(string2.charAt(string2.length - 1 - ipos)) + num;
+            temp_num = parseInt(string2.charAt(string2.length - 1 - ipos)) + temp_num;
         } else if (string2.charAt(string2.length - 1 - ipos) === "") {
-            num = parseInt(string1.charAt(string1.length - 1 - ipos)) + num;
+            temp_num = parseInt(string1.charAt(string1.length - 1 - ipos)) + temp_num;
         } else {
-            num = parseInt(string1.charAt(string1.length - 1 - ipos)) + parseInt(string2.charAt(string2.length - 1 - ipos)) + num;
+            temp_num = parseInt(string1.charAt(string1.length - 1 - ipos)) + parseInt(string2.charAt(string2.length - 1 - ipos)) + temp_num;
         }
+        if (temp_num > 10) { temp_num = temp_num - 10; num = temp_num + num; temp_num = 1; } else { num = temp_num + num; temp_num = 0; }
         ipos++;
     }
+    if (temp_num === 1) { num = "1" + num; }
     return num;
 };
+
+/**
+ * Subtracts the second string from the first string, as if they were integers
+ **/
+stringMath.subtract = function (string1, string2) {
+    "use strict";
+    var num = "", temp_num = 0,ipos = 0;
+    if (string1 > string2) {
+        for (var pos = (string1.length > string2.length) ? string1.length - 1 : string2.length - 1; pos >= 0; pos--) {
+            if (string1.charAt(string1.length - 1 - ipos) === "") {
+                temp_num = parseInt(string2.charAt(string2.length - 1 - ipos)) + temp_num;
+            } else if (string2.charAt(string2.length - 1 - ipos) === "") {
+                temp_num = parseInt(string1.charAt(string1.length - 1 - ipos)) + temp_num;
+            } else {
+                temp_num = parseInt(string1.charAt(string1.length - 1 - ipos)) - parseInt(string2.charAt(string2.length - 1 - ipos)) + temp_num;
+            }
+            if (temp_num < 0) { temp_num = temp_num + 10; num = temp_num + num; temp_num = -1; } else { num = temp_num + num; temp_num = 0; }
+            ipos++;
+        }
+        if (num.charAt(0) === "0") { num = num.substring(1); }
+    } else if (string1 < string2) {
+        for (var pos = (string1.length > string2.length) ? string1.length - 1 : string2.length - 1; pos >= 0; pos--) {
+            if (string1.charAt(string1.length - 1 - ipos) === "") {
+                temp_num = parseInt(string2.charAt(string2.length - 1 - ipos)) + temp_num;
+            } else if (string2.charAt(string2.length - 1 - ipos) === "") {
+                temp_num = parseInt(string1.charAt(string1.length - 1 - ipos)) + temp_num;
+            } else {
+                temp_num = parseInt(string2.charAt(string2.length - 1 - ipos)) - parseInt(string1.charAt(string1.length - 1 - ipos)) + temp_num;
+            }
+            if (temp_num < 0) { temp_num = temp_num + 10; num = temp_num + num; temp_num = -1; } else { num = temp_num + num; temp_num = 0; }
+            ipos++;
+        }
+        if (num.charAt(0) === "0") { num = num.substring(1); }
+        num = "-" + num;
+    } else { num = 0; }
+    return num;
+}
+
+/**
+ * Returns the product of string1 and string2, as if they were integers
+**/
+stringMath.multiply = function (string1, string2) {
+    var num = "", temp_num = 0, ipos1 = 0, ipos2 = 0;
+    return num;
+}
 
 var binary = "2";
 var trinary = "3";
