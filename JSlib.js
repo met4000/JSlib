@@ -230,3 +230,29 @@ String.prototype.toBase = function (base) {
     }
     return (base < 11) ? parseInt(conversion) : conversion;
 }
+
+/**
+ * Sets the "global variable" (cookie) 'globVarName' to 'value', or reads 'globVarName's value
+ **/
+function globVar(globVarName) {
+    "use strict";
+    var value;
+    if (arguments.length == 1) {
+        var x, y, ARRcookies = document.cookie.split(";");
+        for (var i = 0; i < ARRcookies.length; i++) {
+            x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+            y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+            x = x.replace(/^\s+|\s+$/g, "");
+            if (x === globVarName) {
+                return unescape(y) === "" ? undefined : unescape(y);
+            }
+        }
+    } else {
+        value = arguments[1];
+        
+        var exdate = new Date();
+        exdate.setDate(exdate.getDate() + 365);
+        var c_value = escape(value) + "; expires=" + exdate.toUTCString();
+        document.cookie = globVarName + "=" + c_value;
+    }
+}
