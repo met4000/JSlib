@@ -1,10 +1,25 @@
-/*
-function Article() {
-    "use strict";
-    var internalErrorPrefix = 0;
-    var externalErrorPrefix = 0;
+window._JSLIB = undefined;
+
+//A test to show whether JSlib is blocked or not
+//try{window._=false;var js=document.createElement("script");js.type="text/javascript";js.src="http://rawgit.com/met4000/master/JSlib.js";document.body.appendChild(js);}catch(err){_=true}setTimeout("try{if(_JSLIB){}}catch(err){_=true;}if(_){alert('Failure')}else{alert('Success')}",15)
+//As a function to make sure JSlib is included:
+function jslib(branch) {
+    try {
+        if (_JSLIB) { return true; }
+    } catch (err) {
+        try {
+            window._ = false;
+            window.__=undefined;
+            var js = document.createElement("script");
+            js.type = "text/javascript";
+            js.src = "http://rawgit.com/met4000/" + (branch === undefined ? master : branch) + "/JSlib.js";
+            document.body.appendChild(js);
+        } catch (err) { _ = true }
+        setTimeout("try { if (_JSLIB){} } catch (err) { _ = true } if (_) { alert('Failure'); __ = false } else { alert('Success'); __ = true }", 15);
+        while (__ === undefined) {}
+        return __;
+    }
 }
-*/
 
 /**
  * Refreshes the page
