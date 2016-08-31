@@ -269,3 +269,20 @@ function globVar(globVarName) {
         document.cookie = globVarName + "=" + c_value;
     }
 }
+
+/*
+* Returns the number of times 'input' appears in 'this'
+*/
+Array.prototype.amountOf = function (input) {
+    var stringAmount = 0;
+    if (input === "*") {
+        for(var index = 0; index < this.length; index++) {
+            if (this[index] !== "") { stringAmount++; }
+        }
+    } else {
+        for(var index = 0; index < this.length; index++) {
+            if (this[index] === input) { stringAmount++; }
+        }
+    }
+    return stringAmount;
+}
