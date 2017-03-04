@@ -66,7 +66,7 @@ String.prototype.amountOf = function (char) {
 };
 
 /*
-** Returns the number of indexs od 'this' 'input' appears in
+** Returns the number of indexs od 'this' 'input' appears in.
 */
 Array.prototype.amntOf = function (input) {
 	var stringAmount = 0;
@@ -77,7 +77,7 @@ Array.prototype.amntOf = function (input) {
 };
 
 /*
-** Returns the number of times 'input' appears in 'this'
+** Returns the number of times 'input' appears in 'this'.
 */
 Array.prototype.amountOf = function (input) {
 	var stringAmount = 0;
@@ -107,7 +107,7 @@ function includeJs(jsFilePath) {
 }
 
 /*
-** Returns the slashified string
+** Returns the slashified string.
 */
 String.prototype.slashify = function () {
 	var slashified = "\\" + this.toString();
@@ -125,7 +125,7 @@ var decimal = "10";
 var hexadecimal = "16";
 
 /*
-** Returns the base 'base' number in base 10
+** Returns the base 'base' number in base 10.
 */
 String.prototype.toDec = function (base) {
     var symbols = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\`\-\=\~\!\@\#\$\%\^\&\*\(\)\_\+\[\]\\\{\}\|\;\'\:\"\,\.\/\<\>\?".split("");
@@ -143,7 +143,7 @@ String.prototype.toDec = function (base) {
 };
 
 /*
-** Returns the base 10 number in base 'base'
+** Returns the base 10 number in base 'base'.
 */
 String.prototype.toBase = function (base) {
     var symbols = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\`\-\=\~\!\@\#\$\%\^\&\*\(\)\_\+\[\]\\\{\}\|\;\'\:\"\,\.\/\<\>\?".split("");
@@ -158,8 +158,103 @@ String.prototype.toBase = function (base) {
 };
 
 /*
-** 
+** Returns the base 'from' number to base 'to'.
 */
 String.prototype.convertBase = function (from, to) {
 	return this.toDec(from).toBase(to);
+};
+
+/*
+** Prints to the console.
+*/
+function print(input) {
+	console.log(input === undefined ? "" : input);
+}
+
+/*
+** Clears the console.
+*/
+function clear() {
+	console.clear();
+}
+
+/*
+** Creates an (uu)id like string.
+*/
+function id() {
+    function m() { return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1); }
+    function l() { return letters.both[Math.floor(Math.random() * 52).toString()]; }
+    return l() + m().substring(1) + m() + "-" + m() + "-" + m() + "-" + m() + "-" + m() + m() + m();
+}
+
+/*
+** Pauses the code for 'msec' milliseconds
+*/
+function sleep(milliseconds) {
+	var start = new Date().getTime();
+	for (var i = 0; i < 1e7; i++)
+		if ((new Date().getTime() - start) > milliseconds) { break; }
+}
+
+var ajaxfunc = {};
+//Whether AJAX should be async
+ajaxfunc.async = true;
+//Function called once a AJAX response has been received
+ajaxfunc.completeFunction = function() {
+	if (!!ajaxReturn(this)) {
+		if (this.status == 200) {
+			console.info("AJAX post successful");
+			this.func(this);
+		} else if (this.responseText == "send_failed")
+			console.error("Unable to send AJAX post");
+		else
+			console.error("AJAX error");
+	}
+};
+
+/*
+** AJAX POST function. Works for both async and sync. 'value' and 'data' can be either in the form of strings, or string arrays.
+** 'func' is only used in async mode, and is called on a successful AJAX communication. It has one parameter, which is the AJAX object.
+*/
+ajaxfunc.post = function (url, value, data, func) {
+	if (func === undefined)
+		func = function (ajax) {};
+	var ajax = XMLHttpRequest();
+	ajax.func = func;
+	var send = "";
+	value = typeof(value) === "object" ? value : [value];
+	data = typeof(data) === "object" ? data : [data];
+	for (i = 0, i < value.length && i < data.length; i++, send += "&")
+		send += value[i] + "=" + data[i];
+	ajax.open("POST", url, ajaxfunc.async);
+	if (ajaxfunc.async)
+		ajax.onreadystatechange = ajaxfunc.completeFunction;
+	ajax.send(send);
+	if (!ajaxfunc.async) {
+		ajaxfunc.completeFunction(ajax);
+		return ajax.responseText;
+	}
+};
+
+/*
+** AJAX GET function. Works for both async and sync. 'value' and 'data' can be either in the form of strings, or string arrays.
+*/
+ajaxfunc.get = function (url, value, data) {
+	if (func === undefined)
+		func = function (ajax) {};
+	var ajax = XMLHttpRequest();
+	ajax.func = func;
+	var send = "";
+	value = typeof(value) === "object" ? value : [value];
+	data = typeof(data) === "object" ? data : [data];
+	for (i = 0, i < value.length && i < data.length; i++, send += "&")
+		send += value[i] + "=" + data[i];
+	ajax.open("GET", url + "?" + send, ajaxfunc.async);
+	if (ajaxfunc.async)
+		ajax.onreadystatechange = ajaxfunc.completeFunction;
+	ajax.send();
+	if (!ajaxfunc.async) {
+		ajaxfunc.completeFunction(ajax);
+		return ajax.responseText;
+	}
 };
