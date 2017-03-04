@@ -4,10 +4,8 @@ var _JSLIB_loadwait = 15;
 try {
 	var js = document.createElement("script");
 	js.type = "text/javascript";
-	js.src = "http://rawgit.com/met4000/jslib/master/JSlib.js";
-	document.head.appendChild(js);
-} finally {
-	setTimeout(function () {
+	js.src = "http://rawgit.com/met4000/jslib/master/JSlib.local.js";
+	js.onerror = function () {
 		var success = false, _JSLIB_timeoutfunc = function () {
 			if (!!_JSLIB)
 				console.info("JSlib: JSlib " + _JSLIB + " loaded");
@@ -25,5 +23,10 @@ try {
 		if (!success)
 			console.warn("JSlib: Unable to detect loaded copy of JSlib from remote. Loading local copy instead");
 		setTimeout(_JSLIB_timeoutfunc, _JSLIB_loadwait);
-	}, _JSLIB_loadwait);
-}
+	};
+	js.onload = function () {
+		if (!!_JSLIB)
+				console.info("JSlib: JSlib " + _JSLIB + " loaded");
+	};
+	document.head.appendChild(js);
+} catch (err) {}

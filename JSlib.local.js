@@ -1,12 +1,12 @@
 //Used by JSlib.js to detect whether JSlib has been included
-window._JSLIB = "v1.0.0";
+window._JSLIB = "v1.0.1";
 
 
 //Array of letters
 var letters = {};
 letters.lower = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 letters.upper = [];
-for (var i; i < letters.lower.length; i++)
+for (var i = 0; i < letters.lower.length; i++)
 	letters.upper.push(letters.lower[i].toUpperCase());
 letters.both = letters.lower.concat(letters.upper);
 
@@ -22,12 +22,12 @@ function refreshPage() {
 }
 
 /*
-** Returns a string with the char located at 'position' replaced with 'char'.
+** Returns a string with the char located at 'index' replaced with 'char'.
 */
-String.prototype.replaceCharAt = function (position, char) {
+String.prototype.replaceCharAt = function (index, char) {
     var internalCalc1 = this, internalCalc2 = "";
-    internalCalc1 = this.substring(0, position);
-    internalCalc2 = this.substring(position + 1);
+    internalCalc1 = this.substring(0, index);
+    internalCalc2 = this.substring(index + 1);
     return internalCalc1 + char + internalCalc2;
 };
 
@@ -35,15 +35,16 @@ String.prototype.replaceCharAt = function (position, char) {
 ** Returns the index of the 'n'th 'char'. Negative 'n' values return the 'n'th last index of 'char'.
 */
 String.prototype.nIndexOf = function (char, n) {
-	for (internalCalc = 0, index = n<0?this.length:0, found = false; index != n<0?0:this.length && !found; index+n/Math.abs(n)) {
-		if (this.charAt(index) === char) {
+	var total = this.amountOf(char);
+	if (total < Math.abs(n))
+		return -1;
+	for (internalCalc = 0, index = 0; index < this.length; index++) {
+		if (this.charAt(n>0?index:this.length-1-index) === char) {
 			internalCalc++;
-			if (internalCalc === n) { found = true; }
+			if (internalCalc === (n>0?n:total+n+1)) { return index; }
 		}
 	}
-	if (!found)
-		return -1;
-	return index - 1;
+	return -1;
 };
 
 /*
@@ -52,59 +53,68 @@ String.prototype.nIndexOf = function (char, n) {
 */
 String.prototype.amountOf = function (char) {
 	var charAmount = 0;
-	if (char === "*")
-		for (index = 0; index < this.length; index++)
+	if (char === "*") {
+		for (index = 0; index < this.length; index++) {
 			if (letters.lower.indexOf(this.charAt(index).toLowerCase()) > -1 || digits.indexOf(this.charAt(index)) > -1) { charAmount++; }
-	else
-		for (index = 0; index < this.length; index++)
+		}
+	} else {
+		for (index = 0; index < this.length; index++) {
 			if (this.substr(index, char.length) === char) { charAmount++; }
+		}
+	}
 	return charAmount;
-}
+};
+
+/*
+** Returns the number of indexs od 'this' 'input' appears in
+*/
+Array.prototype.amntOf = function (input) {
+	var stringAmount = 0;
+	for(var index = 0; index < this.length; index++) {
+		if (this[index].amountOf(input)>0) { stringAmount++; }
+	}
+	return stringAmount;
+};
 
 /*
 ** Returns the number of times 'input' appears in 'this'
 */
 Array.prototype.amountOf = function (input) {
-    var stringAmount = 0;
-    if (input === "*") {
-        for(var index = 0; index < this.length; index++) {
-            if (this[index] !== "") { stringAmount++; }
-        }
-    } else {
-        for(var index = 0; index < this.length; index++) {
-            if (this[index] === input) { stringAmount++; }
-        }
-    }
-    return stringAmount;
-}
+	var stringAmount = 0;
+	for(var index = 0; index < this.length; index++) {
+		stringAmount += this[index].amountOf(input);
+	}
+	return stringAmount;
+};
 
 /*
-** Returns a random int between 'min' and 'max'.
+** Returns a random int between 'min' and 'max', inclusive. If no parameters are specified, gets a random integer.
 */
 function getRandomInt(min, max) {
-    "use strict";
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+	min = min === undefined ? 0 : min;
+	max = max === undefined ? 9 : max;
+	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 /*
 ** Includes the JavaScript file located at 'jsFilePath'.
 */
 function includeJs(jsFilePath) {
-    var js = document.createElement("script");
-    js.type = "text/javascript";
-    js.src = jsFilePath;
-    document.body.appendChild(js);
+	var js = document.createElement("script");
+	js.type = "text/javascript";
+	js.src = jsFilePath;
+	document.body.appendChild(js);
 }
 
 /*
 ** Returns the slashified string
 */
 String.prototype.slashify = function () {
-    var slashified = "\\" + this.toString();
-    for (var pos = 2; pos < slashified.length; pos+=2)
-        slashified = slashified.substring(0, pos) + "\\" + slashified.substring(pos);
-    return slashified;
-}
+	var slashified = "\\" + this.toString();
+	for (var pos = 2; pos < slashified.length; pos+=2)
+		slashified = slashified.substring(0, pos) + "\\" + slashified.substring(pos);
+	return slashified;
+};
 
 var binary = "2";
 var trinary = "3";
@@ -130,7 +140,7 @@ String.prototype.toDec = function (base) {
         hierarchy++;
     }
     return decimal.toString();
-}
+};
 
 /*
 ** Returns the base 10 number in base 'base'
@@ -145,4 +155,11 @@ String.prototype.toBase = function (base) {
         decimal = Math.floor(decimal / base);
     }
     return (base < 11) ? parseInt(conversion) : conversion;
-}
+};
+
+/*
+** 
+*/
+String.prototype.convertBase = function (from, to) {
+	return this.toDec(from).toBase(to);
+};
