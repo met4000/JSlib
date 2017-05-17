@@ -68,7 +68,7 @@ String.prototype.amountOf = function (char) {
 /*
 ** Returns the number of indexs od 'this' 'input' appears in
 */
-Array.prototype.amntOf = function (input) {
+Array.prototype.amountOf = function (input) {
 	var stringAmount = 0;
 	for(var index = 0; index < this.length; index++) {
 		if (this[index].amountOf(input)>0) { stringAmount++; }
